@@ -346,7 +346,7 @@
         <div class="kpi-row">
             <div class="kpi-card">
                 <label>إجمالي المؤسسات</label>
-                <span>21</span>
+                <span>22</span>
             </div>
             <div class="kpi-card" style="border-right: 4px solid #8e44ad;">
                 <label>المعاهد الوطنية (INSFP)</label>
@@ -354,11 +354,11 @@
             </div>
             <div class="kpi-card" style="border-right: 4px solid #2980b9;">
                 <label>مراكز التكوين (CFPA)</label>
-                <span style="color: #2980b9;">17</span>
+                <span style="color: #2980b9;">18</span>
             </div>
             <div class="kpi-card">
                 <label>إجمالي المترشحين</label>
-                <span style="color: var(--success);">67</span>
+                <span style="color: var(--success);">73</span>
             </div>
 
         </div>
@@ -459,7 +459,7 @@
                             <td>4 معاهد وطنية (INSFP) + 3 مراكز تكوين مهني</td>
                             <td style="text-align: center; font-weight: bold; color: var(--primary);">11</td>
                             <td style="text-align: center;"><span class="badge badge-m"><a
-                                        href="https://docs.google.com/spreadsheets/d/1RDQhjoIXGpAn_4bQx1Ur-tgHdy2gxPU0FOv2Wmwtvds/edit?usp=sharing">39</a></span>
+                                        href="https://docs.google.com/spreadsheets/d/1EjVVHqT85Hqq4NHD3b0hBLuvHujFjTe2oQ8T_l7kgpw/edit?usp=sharing">39</a></span>
                             </td>
                         </tr>
                         <tr>
@@ -468,7 +468,7 @@
                             <td>مراكز التكوين المهني (CFPA)</td>
                             <td style="text-align: center; font-weight: bold; color: var(--primary);">7</td>
                             <td style="text-align: center;"><span class="badge badge-m"><a
-                                        href="https://docs.google.com/spreadsheets/d/1YJEky-pxr5oLe8uoPkPeIq8owROTML9uewPu6aPNlj4/edit?usp=sharing">28</a></span>
+                                        href="https://docs.google.com/spreadsheets/d/1Hfq9-O1e-YrBfodn1IyAFnqy985-bKG-hSQ3VVSGMfc/edit?usp=sharing">28</a></span>
                             </td>
                         </tr>
                         <tr style="background: #f8fafc; font-weight: bold; border-top: 2px solid #ccc;">
@@ -579,8 +579,8 @@
             const insfpData = [
                 { name: "معهد التعليم المهني أرزيو", psep: 3, admin: 0, manager: 0, counselor: 0 },
                 { name: "معهد التعليم المهني سطيف", psep: 3, admin: 0, manager: 0, counselor: 0 },
-                { name: "المعهد الوطني المتخصص في التكوين المهني الطاهير", psep: 3, admin: 0, manager: 0, counselor: 0 },
-                { name: "المعهد الوطني المتخصص في التكوين المهني بودواو", psep: 2, admin: 0, manager: 0, counselor: 0 }
+                { name: "المعهد الوطني المتخصص الطاهير", psep: 3, admin: 0, manager: 0, counselor: 0 },
+                { name: "المعهد الوطني المتخصص بودواو", psep: 1, admin: 1, manager: 0, counselor: 0 }
             ];
 
             const insfpTableBody = document.getElementById('insfpRankTable');
@@ -628,15 +628,24 @@
 
             //// ------------ جدول المترشحين حسب المراكز (CFPA) والرتب ----------
             const cfpaData = [
-                { name: "CFPA عين طويلة", psep: 1, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
-                { name: "CFPA المزدور", psep: 4, tech: 0, counselor: 1, guidance: 0, admin: 0, manager: 0 },
-                { name: "CFPA أم البواقي", psep: 3, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
-                { name: "CFPA بني معوش", psep: 1, tech: 0, counselor: 0, guidance: 0, admin: 1, manager: 0 },
-                { name: "CFPA تلاغمة", psep: 3, tech: 0, counselor: 0, guidance: 0, admin: 0, manager: 0 },
-                { name: "CFPA تلمسان", psep: 4, tech: 1, counselor: 0, guidance: 0, admin: 1, manager: 0 },
-                { name: "CFPA سوق الخميس", psep: 3, tech: 2, counselor: 0, guidance: 0, admin: 0, manager: 0 },
-                { name: "CFPA وهران 01 (بنات)", psep: 1, tech: 2, counselor: 1, guidance: 1, admin: 0, manager: 1 },
-                { name: "CFPA جيجل", psep: 3, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 }
+                { name: "مركز مستغانم 01 / 02", psep: 1, tech: 0, counselor: 4, guidance: 0, admin: 0, manager: 1 },
+                { name: "مركز مزغران (مستغانم)", psep: 0, tech: 1, counselor: 1, guidance: 0, admin: 1, manager: 2 },
+                { name: "مركز خميس الخشنة (بومرداس)", psep: 1, tech: 1, counselor: 1, guidance: 0, admin: 1, manager: 0 },
+                { name: "مركز سريانة (باتنة)", psep: 2, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 1 },
+                { name: "مركز تازمالت (بجاية)", psep: 4, tech: 0, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز زمالة الأمير ع.ق (تيارت)", psep: 2, tech: 0, counselor: 2, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز تاشتة (عين الدفلى)", psep: 2, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز معسكر", psep: 0, tech: 2, counselor: 0, guidance: 1, admin: 0, manager: 0 },
+                { name: "مركز ميلة 01", psep: 1, tech: 0, counselor: 0, guidance: 0, admin: 0, manager: 2 },
+                { name: "مركز بوعاطي محمود (قالمة)", psep: 2, tech: 0, counselor: 1, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز العسافية (الأغواط)", psep: 1, tech: 2, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز سبقاق (الأغواط)", psep: 2, tech: 0, counselor: 0, guidance: 0, admin: 1, manager: 0 },
+                { name: "مركز موزاية (البليدة)", psep: 1, tech: 0, counselor: 1, guidance: 0, admin: 1, manager: 0 },
+                { name: "مركز سوق النعمان (أم البواقي)", psep: 2, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز برج منايل (بومرداس)", psep: 1, tech: 0, counselor: 2, guidance: 0, admin: 0, manager: 0 },
+                { name: "مركز ساتال (غليزان)", psep: 1, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 1 },
+                { name: "مركز عين الملح (المسيلة)", psep: 1, tech: 0, counselor: 1, guidance: 0, admin: 1, manager: 0 },
+                { name: "مركز تيمياوين (ب.ب. مختار)", psep: 1, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 }
             ];
 
             const cfpaTableBody = document.getElementById('cfpaRankTable');
@@ -691,21 +700,29 @@
 
             // --- جدول المعاهد والمراكز والمترشحين ---
             const institutesData = [
-                { name: "معهد التعليم المهني أرزيو ", count: 3, type: "INSFP" },
-                { name: "معهد التعليم المهني سطيف ", count: 3, type: "INSFP" },
-                { name: "المعهد الوطني المتخصص في التكوين المهني الطاهير ", count: 3, type: "INSFP" },
-                { name: "المعهد الوطني المتخصص في التكوين المهني بودواو ", count: 2, type: "INSFP" },
+                { name: "معهد أرزيو", count: 3, type: "INSFP" },
+                { name: "معهد سطيف", count: 3, type: "INSFP" },
+                { name: "معهد الطاهير", count: 3, type: "INSFP" },
+                { name: "معهد بودواو", count: 2, type: "INSFP" },
 
-
-                { name: "مركز التكوين المهني و التمهين عين طويلة – خنشلة", count: 2, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين المزدور – البويرة", count: 5, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين أم البواقي", count: 4, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين بني معوش – بجاية", count: 2, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين تلاغمة – ميلة", count: 3, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين تلمسان", count: 6, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين سوق الخميس – البويرة", count: 5, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين للبنات وهران 01", count: 6, type: "CFPA" },
-                { name: "مركز التكوين المهني و التمهين جيجل", count: 4, type: "CFPA" }
+                { name: "مركز مستغانم 01 / 02", count: 6, type: "CFPA" },
+                { name: "مركز مزغران (مستغانم)", count: 5, type: "CFPA" },
+                { name: "مركز خميس الخشنة (بومرداس)", count: 4, type: "CFPA" },
+                { name: "مركز سريانة (باتنة)", count: 4, type: "CFPA" },
+                { name: "مركز تازمالت (بجاية)", count: 4, type: "CFPA" },
+                { name: "مركز زمالة الأمير ع.ق (تيارت)", count: 4, type: "CFPA" },
+                { name: "مركز تاشتة (عين الدفلى)", count: 3, type: "CFPA" },
+                { name: "مركز معسكر", count: 3, type: "CFPA" },
+                { name: "مركز ميلة 01", count: 3, type: "CFPA" },
+                { name: "مركز بوعاطي محمود (قالمة)", count: 3, type: "CFPA" },
+                { name: "مركز العسافية (الأغواط)", count: 3, type: "CFPA" },
+                { name: "مركز سبقاق (الأغواط)", count: 3, type: "CFPA" },
+                { name: "مركز موزاية (البليدة)", count: 3, type: "CFPA" },
+                { name: "مركز سوق النعمان (أم البواقي)", count: 3, type: "CFPA" },
+                { name: "مركز برج منايل (بومرداس)", count: 3, type: "CFPA" },
+                { name: "مركز ساتال (غليزان)", count: 3, type: "CFPA" },
+                { name: "مركز عين الملح (المسيلة)", count: 3, type: "CFPA" },
+                { name: "مركز تيمياوين (برج باجي مختار)", count: 2, type: "CFPA" }
             ];
 
             function renderInstitutesTable(filterType, btnElem) {
@@ -784,24 +801,24 @@
                 polygonSeries.set("heatRules", [{ target: polygonSeries.mapPolygons.template, dataField: "value", min: am5.color(0xd1e9ff), max: am5.color(0x185FA5), key: "fill" }]);
 
                 polygonSeries.data.setAll([
-                    // المراكز (CFPA)
-                    { id: "DZ-40", value: 2 },   // خنشلة - عين طويلة (2)
-                    { id: "DZ-10", value: 10 },  // البويرة - المزدور (5) + سوق الخميس (5)
-                    { id: "DZ-04", value: 4 },   // أم البواقي (4)
-                    { id: "DZ-06", value: 2 },   // بجاية - بني معوش (2)
-                    { id: "DZ-43", value: 3 },   // ميلة - تلاغمة (3)
-                    { id: "DZ-31", value: 6 },   // وهران 01 بنات (6)
-                    { id: "DZ-18", value: 4 },   // جيجل (4)
-                    // المعاهد (INSFP)
-                    { id: "DZ-17", value: 3 },   // الجلفة - بربيح (3)
-                    { id: "DZ-24", value: 4 },   // قالمة - أمدور (4)
-                    { id: "DZ-26", value: 3 },   // المدية - البرواقية (3)
-                    { id: "DZ-15", value: 3 },   // تيزي وزو - بواقنون (3)
-                    { id: "DZ-34", value: 3 },   // برج بوعريريج - راس الوادي (3)
-                    { id: "DZ-22", value: 3 },   // سيدي بلعباس - لعجين ميلود (3)
-                    { id: "DZ-03", value: 5 },   // الأغواط - التسيير (5)
-                    // تلمسان: CFPA (6) + INSFP سبدو (3)
-                    { id: "DZ-13", value: 9 }
+                    { id: "DZ-44", value: 3 },   // عين الدفلى (CFPA فقط)
+                    { id: "DZ-50", value: 2 },   // برج باجي مختار
+                    { id: "DZ-35", value: 9 },   // بومرداس (خميس الخشنة + برج منايل + بودواو)
+                    { id: "DZ-05", value: 4 },   // باتنة
+                    { id: "DZ-27", value: 11 },  // مستغانم (5+6)
+                    { id: "DZ-29", value: 3 },   // معسكر
+                    { id: "DZ-43", value: 3 },   // ميلة
+                    { id: "DZ-24", value: 3 },   // قالمة
+                    { id: "DZ-31", value: 3 },   // وهران - أرزيو
+                    { id: "DZ-19", value: 3 },   // سطيف
+                    { id: "DZ-18", value: 3 },   // جيجل - الطاهير
+                    { id: "DZ-03", value: 6 },   // الأغواط
+                    { id: "DZ-09", value: 3 },   // البليدة
+                    { id: "DZ-04", value: 3 },   // أم البواقي
+                    { id: "DZ-06", value: 4 },   // بجاية
+                    { id: "DZ-14", value: 4 },   // تيارت
+                    { id: "DZ-48", value: 3 },   // غليزان
+                    { id: "DZ-28", value: 3 }    // المسيلة
                 ]);
 
                 // --- HeatLegend مفتاح الخريطة ---
@@ -954,21 +971,32 @@
                 type: 'pie',
                 data: {
                     labels: [
-                        'تلمسان (6)',
-                        'سوق الخميس (5)',
-                        'المزدور (5)',
-                        'أم البواقي (4)',
-                        'جيجل (4)',
-                        'وهران 01 (6)',
-                        'عين طويلة (2)',
-                        'بني معوش (2)',
-                        'تلاغمة (3)'
+                        'مستغانم 01 / 02 (6)',
+                        'مزغران (5)',
+                        'خميس الخشنة (4)',
+                        'سريانة (4)',
+                        'تازمالت (4)',
+                        'زمالة الأمير (4)',
+                        'تاشتة (3)',
+                        'معسكر (3)',
+                        'ميلة (3)',
+                        'بوعاطي (3)',
+                        'العسافية (3)',
+                        'سبقاق (3)',
+                        'موزاية (3)',
+                        'سوق النعمان (3)',
+                        'برج منايل (3)',
+                        'ساتال (3)',
+                        'عين الملح (3)',
+                        'تيمياوين (2)'
                     ],
                     datasets: [{
-                        data: [6, 5, 5, 4, 4, 6, 2, 2, 3],
+                        data: [5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
                         backgroundColor: [
                             '#3498db', '#e67e22', '#e74c3c', '#f1c40f',
-                            '#1abc9c', '#9b59b6', '#2ecc71', '#34495e', '#f39c12'
+                            '#1abc9c', '#9b59b6', '#2ecc71', '#34495e', '#f39c12',
+                            '#d35400', '#27ae60', '#c0392b', '#8e44ad', '#2980b9',
+                            '#16a085', '#7f8c8d', '#f39c12', '#d35400'
                         ]
                     }]
                 },
@@ -1016,7 +1044,7 @@
                     datasets: [
                         {
                             label: 'عدد المترشحين',
-                            data: [11, 0, 0, 0],
+                            data: [11, 1, 0, 0],
                             backgroundColor: ['#2980b9', '#8e44ad', '#27ae60', '#f39c12'],
                             borderRadius: 4
                         }
