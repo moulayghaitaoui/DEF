@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحليل مسابقة مدراء التكوين المهني 2026 </title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/flow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/algeriaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+    <style>
+        /* تنسيق أزرار التصفية */
+        .filter-tabs {
+            display: flex;
+            background: #eee;
+            padding: 5px;
+            border-radius: 10px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: 0.3s;
+            background: transparent;
+            color: #666;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-type {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .type-insfp {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .type-cfpa {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+
+        :root {
+            --primary: #185FA5;
+            --secondary: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #f4f7fa;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--secondary);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        /* التنسيق المحدث للهيدر */
+        header {
+            background: var(--white);
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* لتوزيع العناصر على الأطراف */
+            border-top: 6px solid var(--primary);
+            text-align: center;
+        }
+
+        .header-logo {
+            width: 100px;
+            /* حجم الشعار */
+            height: auto;
+        }
+
+        .header-center-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header-official h2 {
+            font-size: 18px;
+            color: var(--secondary);
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .header-official h3 {
+            font-size: 16px;
+            color: var(--secondary);
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .header-content h1 {
+            font-size: 22px;
+            color: var(--primary);
+            margin: 10px 0 5px 0;
+        }
+
+        /* تحسين التجاوب مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .header-logo {
+                width: 70px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* KPI Cards */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .kpi-card label {
+            display: block;
+            font-size: 12px;
+            color: #95a5a6;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .kpi-card span {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .panel {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding-right: 12px;
+            border-right: 4px solid var(--primary);
+            color: var(--secondary);
+        }
+
+        /* Charts Height */
+        #mapdiv {
+            width: 100%;
+            height: 500px;
+        }
+
+        .chart-container {
+            height: 250px;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 12px;
+            font-size: 13px;
+            color: #64748b;
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge-m {
+            background: #e1effe;
+            color: #1e429f;
+        }
+
+        .badge-f {
+            background: #fde2e1;
+            color: #9b1c1c;
+        }
+
+        /* Modal (Popup) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 15px;
+            width: 50%;
+            box-shadow: var(--shadow);
+            animation: slideDown 0.4s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            float: left;
+            font-size: 28px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: var(--danger);
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <img src="logo.jpeg" alt="شعار الوزارة" class="header-logo">
+
+            <div class="header-center-content">
+                <div class="header-official">
+                    <h2>الجمهورية الجزائرية الديمقراطية الشعبية</h2>
+                    <h3>وزارة التكوين والتعليم المهنيين</h3>
+                </div>
+                <div class="header-content">
+                    <h1> لوحة التحكم: مسابقة مدراء التكوين المهني 2026 مع الشهار</h1>
+
+                </div>
+            </div>
+
+            <img src="logo.jpeg" alt="شعار الوزارة" class="header-logo">
+        </header>
+
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <label>إجمالي المؤسسات</label>
+                <span>18</span>
+            </div>
+            <div class="kpi-card" style="border-right: 4px solid #8e44ad;">
+                <label>المعاهد الوطنية (INSFP)</label>
+                <span style="color: #8e44ad;">04</span>
+            </div>
+            <div class="kpi-card" style="border-right: 4px solid #2980b9;">
+                <label>مراكز التكوين (CFPA)</label>
+                <span style="color: #2980b9;">10</span>
+            </div>
+            <div class="kpi-card">
+                <label>إجمالي المترشحين</label>
+                <span style="color: var(--success);">67</span>
+            </div>
+
+        </div>
+        <div class="main-grid">
+            <div style="display: flex; flex-direction: column; gap: 25px;">
+                <div class="panel" style="margin-bottom: 0;">
+                    <h2>التوزيع الجغرافي للمترشحين (حسب الولاية)</h2>
+                    <div id="mapdiv"></div>
+                </div>
+
+                <div class="panel" style="margin-bottom: 0;">
+                    <h2 style="font-size: 17px; text-align: center;">توزيع المترشحين حسب نمط التنقل الجغرافي</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                        <div>
+                            <h3
+                                style="text-align: center; font-size: 14px; color: var(--secondary); margin-bottom: 10px;">
+                                لمنصب مدير معهد (INSFP)</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="mobilityPie"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3
+                                style="text-align: center; font-size: 14px; color: var(--secondary); margin-bottom: 10px;">
+                                لمنصب مدير مركز (CFPA)</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="mobilityCenterPie"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2 style="font-size: 17px; margin-bottom: 15px;">نسبة كل مؤسسة من إجمالي المترشحين</h2>
+
+                <h3 style="font-size: 14px; color: var(--secondary); margin-bottom: 5px;">مدير معهد (INSFP)</h3>
+                <div class="chart-container" style="height: 190px; margin-bottom: 25px;">
+                    <canvas id="institutePie"></canvas>
+                </div>
+
+                <h3 style="font-size: 14px; color: var(--secondary); margin-bottom: 5px;">مدير مركز (CFPA)</h3>
+                <div class="chart-container" style="height: 320px; margin-bottom: 25px;">
+                    <canvas id="centerPie"></canvas>
+                </div>
+
+                <h2 style="font-size: 17px; margin-bottom: 15px;">توزيع المترشحين حسب الرتبة الحالية</h2>
+
+                <h3 style="font-size: 14px; color: var(--secondary); margin-bottom: 5px;">لمنصب مدير معهد (INSFP)</h3>
+                <div class="chart-container" style="height: 180px; margin-bottom: 25px;">
+                    <canvas id="rankBarChart"></canvas>
+                </div>
+
+                <h3 style="font-size: 14px; color: var(--secondary); margin-bottom: 5px;">لمنصب مدير مركز (CFPA)</h3>
+                <div class="chart-container" style="height: 180px;">
+                    <canvas id="rankCenterBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px; border-top: 4px solid #8e44ad;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="border-right-color: #8e44ad;">📊 توزيع الرتب داخل كل معهد (INSFP) - أعمدة مكدسة</h2>
+            </div>
+            <div class="chart-container" style="height: 350px;">
+                <canvas id="stackedInsfpBarChart"></canvas>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px; border-top: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="border-right-color: var(--primary);">📊 توزيع الرتب داخل كل مركز (CFPA) - أعمدة مكدسة</h2>
+            </div>
+            <div class="chart-container" style="height: 350px;">
+                <canvas id="stackedCfpaBarChart"></canvas>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px; border-top: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="border-right-color: var(--primary);">👥 توزيع اللجان والمؤسسات والمترشحين</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اللجنة</th>
+                            <th>الأعضاء</th>
+                            <th>نوع المؤسسات</th>
+                            <th style="text-align: center;">عدد المؤسسات</th>
+                            <th style="text-align: center;">عدد المترشحين</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>اللجنة الأولى</strong></td>
+                            <td>السيد بوشطارة مهدي<br>السيد بن با جلول<br>السيد عيسى براهيمي</td>
+                            <td>4 معاهد وطنية (INSFP) + 3 مراكز تكوين مهني</td>
+                            <td style="text-align: center; font-weight: bold; color: var(--primary);">11</td>
+                            <td style="text-align: center;"><span class="badge badge-m"><a
+                                        href="https://docs.google.com/spreadsheets/d/1RDQhjoIXGpAn_4bQx1Ur-tgHdy2gxPU0FOv2Wmwtvds/edit?usp=sharing">39</a></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>اللجنة الثانية</strong></td>
+                            <td>السيد بافو أحمد<br>السيد كوديل صديق<br>السيد موكاح فاروق</td>
+                            <td>مراكز التكوين المهني (CFPA)</td>
+                            <td style="text-align: center; font-weight: bold; color: var(--primary);">7</td>
+                            <td style="text-align: center;"><span class="badge badge-m"><a
+                                        href="https://docs.google.com/spreadsheets/d/1YJEky-pxr5oLe8uoPkPeIq8owROTML9uewPu6aPNlj4/edit?usp=sharing">28</a></span>
+                            </td>
+                        </tr>
+                        <tr style="background: #f8fafc; font-weight: bold; border-top: 2px solid #ccc;">
+                            <td colspan="3" style="text-align: right;"><strong>المجموع الإجمالي</strong></td>
+                            <td style="text-align: center; color: var(--primary);">18</td>
+                            <td style="text-align: center;"><span class="badge"
+                                    style="background:#8e44ad; color:white; min-width:30px; display:inline-block;">67</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="border-right-color: #16a085; margin-bottom: 0;">📋 المعاهد والمراكز</h2>
+                <div class="filter-tabs">
+                    <button class="tab-btn active" onclick="renderInstitutesTable('all', this)">الكل</button>
+                    <button class="tab-btn" onclick="renderInstitutesTable('INSFP', this)">🎓 معاهد</button>
+                    <button class="tab-btn" onclick="renderInstitutesTable('CFPA', this)">🏛️ مراكز</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المؤسسة</th>
+                            <th style="text-align: center;">المترشحين</th>
+                        </tr>
+                    </thead>
+                    <tbody id="institutesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="vacantModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 style="color: var(--danger); margin-bottom: 20px;">المؤسسات الشاغرة تماماً (0 مترشح)</h2>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: #fff5f5;">
+                            <th>الرقم</th>
+                            <th>الولاية</th>
+                            <th>تسمية المؤسسة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vacantTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px; border-top: 4px solid #8e44ad;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="border-right-color: #8e44ad;">📊 جدول المترشحين حسب المعاهد الوطنية (INSFP) والرتب</h2>
+                <span class="badge" style="background: #f3e5f5; color: #7b1fa2;">إجمالي المعاهد: 04</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المعهد</th>
+                            <th>أستاذ متخصص</th>
+                            <th>متصرف رئيسي</th>
+                            <th>مقتصد مسيّر</th>
+                            <th>مستشار رئيسي</th>
+                            <th>المجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody id="insfpRankTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px; border-top: 4px solid #16a085;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="border-right-color: #16a085;">📊 جدول المترشحين حسب المركز (CFPA) والرتب</h2>
+                <span class="badge" style="background: #e8f8f5; color: #117a65;">إجمالي المراكز: 10</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المركز</th>
+                            <th>أستاذ متخصص</th>
+                            <th>مساعد تقني</th>
+                            <th>مستشار رئيسي</th>
+                            <th>مستشار توجيه</th>
+                            <th>متصرف</th>
+                            <th>مقتصد</th>
+                            <th>المجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cfpaRankTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <script>
+
+            //// ------------ جدول المترشحين حسب المعاهد الوطنية (INSFP) والرتب ----------
+            const insfpData = [
+                { name: "معهد التعليم المهني أرزيو", psep: 3, admin: 0, manager: 0, counselor: 0 },
+                { name: "معهد التعليم المهني سطيف", psep: 3, admin: 0, manager: 0, counselor: 0 },
+                { name: "المعهد الوطني المتخصص في التكوين المهني الطاهير", psep: 3, admin: 0, manager: 0, counselor: 0 },
+                { name: "المعهد الوطني المتخصص في التكوين المهني بودواو", psep: 2, admin: 0, manager: 0, counselor: 0 }
+            ];
+
+            const insfpTableBody = document.getElementById('insfpRankTable');
+            insfpTableBody.innerHTML = "";
+
+            let totalPsep = 0;
+            let totalAdmin = 0;
+            let totalManager = 0;
+            let totalCounselor = 0;
+            let grandTotal = 0;
+
+            insfpData.forEach(item => {
+                const total = item.psep + item.admin + item.manager + item.counselor;
+                totalPsep += item.psep;
+                totalAdmin += item.admin;
+                totalManager += item.manager;
+                totalCounselor += item.counselor;
+                grandTotal += total;
+
+                let row = `<tr>
+        <td><strong>${item.name}</strong></td>
+        <td style="text-align:center; font-weight:bold; color:#185FA5;">${item.psep}</td>
+        <td style="text-align:center;">${item.admin}</td>
+        <td style="text-align:center;">${item.manager}</td>
+        <td style="text-align:center;">${item.counselor}</td>
+        <td style="text-align:center;">
+            <span class="badge" style="background:#8e44ad; color:white; min-width:30px; display:inline-block;">${total}</span>
+        </td>
+    </tr>`;
+                insfpTableBody.innerHTML += row;
+            });
+
+            // إضافة صف المجموع الإجمالي
+            let totalsRow = `<tr style="background: #f8fafc; font-weight: bold; border-top: 2px solid #ccc;">
+        <td><strong>المجموع الإجمالي</strong></td>
+        <td style="text-align:center; color:#185FA5;">${totalPsep}</td>
+        <td style="text-align:center;">${totalAdmin}</td>
+        <td style="text-align:center;">${totalManager}</td>
+        <td style="text-align:center;">${totalCounselor}</td>
+        <td style="text-align:center;">
+            <span class="badge" style="background:#8e44ad; color:white; min-width:30px; display:inline-block;">${grandTotal}</span>
+        </td>
+    </tr>`;
+            insfpTableBody.innerHTML += totalsRow;
+
+            //// ------------ جدول المترشحين حسب المراكز (CFPA) والرتب ----------
+            const cfpaData = [
+                { name: "CFPA عين طويلة", psep: 1, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "CFPA المزدور", psep: 4, tech: 0, counselor: 1, guidance: 0, admin: 0, manager: 0 },
+                { name: "CFPA أم البواقي", psep: 3, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "CFPA بني معوش", psep: 1, tech: 0, counselor: 0, guidance: 0, admin: 1, manager: 0 },
+                { name: "CFPA تلاغمة", psep: 3, tech: 0, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "CFPA تلمسان", psep: 4, tech: 1, counselor: 0, guidance: 0, admin: 1, manager: 0 },
+                { name: "CFPA سوق الخميس", psep: 3, tech: 2, counselor: 0, guidance: 0, admin: 0, manager: 0 },
+                { name: "CFPA وهران 01 (بنات)", psep: 1, tech: 2, counselor: 1, guidance: 1, admin: 0, manager: 1 },
+                { name: "CFPA جيجل", psep: 3, tech: 1, counselor: 0, guidance: 0, admin: 0, manager: 0 }
+            ];
+
+            const cfpaTableBody = document.getElementById('cfpaRankTable');
+            cfpaTableBody.innerHTML = "";
+
+            let totalCfpaPsep = 0;
+            let totalCfpaTech = 0;
+            let totalCfpaCounselor = 0;
+            let totalCfpaGuidance = 0;
+            let totalCfpaAdmin = 0;
+            let totalCfpaManager = 0;
+            let grandCfpaTotal = 0;
+
+            cfpaData.forEach(item => {
+                const total = item.psep + item.tech + item.counselor + item.guidance + item.admin + item.manager;
+                totalCfpaPsep += item.psep;
+                totalCfpaTech += item.tech;
+                totalCfpaCounselor += item.counselor;
+                totalCfpaGuidance += item.guidance;
+                totalCfpaAdmin += item.admin;
+                totalCfpaManager += item.manager;
+                grandCfpaTotal += total;
+
+                let row = `<tr>
+        <td><strong>${item.name}</strong></td>
+        <td style="text-align:center; font-weight:bold; color:#16a085;">${item.psep}</td>
+        <td style="text-align:center;">${item.tech}</td>
+        <td style="text-align:center;">${item.counselor}</td>
+        <td style="text-align:center;">${item.guidance}</td>
+        <td style="text-align:center;">${item.admin}</td>
+        <td style="text-align:center;">${item.manager}</td>
+        <td style="text-align:center;">
+            <span class="badge" style="background:#1abc9c; color:white; min-width:30px; display:inline-block;">${total}</span>
+        </td>
+    </tr>`;
+                cfpaTableBody.innerHTML += row;
+            });
+
+            let cfpaTotalsRow = `<tr style="background: #f8fafc; font-weight: bold; border-top: 2px solid #ccc;">
+        <td><strong>المجموع الإجمالي</strong></td>
+        <td style="text-align:center; color:#16a085;">${totalCfpaPsep}</td>
+        <td style="text-align:center;">${totalCfpaTech}</td>
+        <td style="text-align:center;">${totalCfpaCounselor}</td>
+        <td style="text-align:center;">${totalCfpaGuidance}</td>
+        <td style="text-align:center;">${totalCfpaAdmin}</td>
+        <td style="text-align:center;">${totalCfpaManager}</td>
+        <td style="text-align:center;">
+            <span class="badge" style="background:#1abc9c; color:white; min-width:30px; display:inline-block;">${grandCfpaTotal}</span>
+        </td>
+    </tr>`;
+            cfpaTableBody.innerHTML += cfpaTotalsRow;
+
+            // --- جدول المعاهد والمراكز والمترشحين ---
+            const institutesData = [
+                { name: "معهد التعليم المهني أرزيو ", count: 3, type: "INSFP" },
+                { name: "معهد التعليم المهني سطيف ", count: 3, type: "INSFP" },
+                { name: "المعهد الوطني المتخصص في التكوين المهني الطاهير ", count: 3, type: "INSFP" },
+                { name: "المعهد الوطني المتخصص في التكوين المهني بودواو ", count: 2, type: "INSFP" },
+
+
+                { name: "مركز التكوين المهني و التمهين عين طويلة – خنشلة", count: 2, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين المزدور – البويرة", count: 5, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين أم البواقي", count: 4, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين بني معوش – بجاية", count: 2, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين تلاغمة – ميلة", count: 3, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين تلمسان", count: 6, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين سوق الخميس – البويرة", count: 5, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين للبنات وهران 01", count: 6, type: "CFPA" },
+                { name: "مركز التكوين المهني و التمهين جيجل", count: 4, type: "CFPA" }
+            ];
+
+            function renderInstitutesTable(filterType, btnElem) {
+                if (btnElem) {
+                    btnElem.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btnElem.classList.add('active');
+                }
+
+                const tbody = document.getElementById('institutesTableBody');
+                tbody.innerHTML = "";
+                let totalCount = 0;
+
+                const filtered = filterType === 'all' ? institutesData : institutesData.filter(i => i.type === filterType);
+
+                filtered.forEach(item => {
+                    totalCount += item.count;
+                    const badge = item.type === 'INSFP' ? '<span class="badge-type type-insfp" style="margin-right:8px;">معهد</span>' : '<span class="badge-type type-cfpa" style="margin-right:8px;">مركز</span>';
+                    let row = `<tr>
+            <td><strong>${item.name}</strong>${badge}</td>
+            <td style="text-align:center"><span class="badge badge-m">${item.count}</span></td>
+        </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+                // إضافة صف المجموع
+                let totalRow = `<tr style="background: #f8fafc; font-weight: bold;">
+            <td><strong>المجموع</strong></td>
+            <td style="text-align:center"><span class="badge" style="background: var(--primary); color: white;">${totalCount}</span></td>
+        </tr>`;
+                tbody.innerHTML += totalRow;
+            }
+
+            // 초기 랜더링 (Initial Render)
+            document.addEventListener('DOMContentLoaded', () => {
+                renderInstitutesTable('all');
+            });
+            // --- 1. الخريطة التفاعلية ---
+            am5.ready(function () {
+                var root = am5.Root.new("mapdiv");
+                root.setThemes([am5themes_Animated.new(root)]);
+
+                root.container.set("layout", root.verticalLayout);
+
+                var chart = root.container.children.push(am5map.MapChart.new(root, {
+                    projection: am5map.geoMercator(),
+                    panX: "none", panY: "none", wheelY: "none",
+                    height: am5.percent(85)
+                }));
+                var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+                    geoJSON: am5geodata_algeriaLow,
+                    valueField: "value",
+                    calculateAggregates: true
+                }));
+                // --- إعداد تصميم واضح للتلميحات (Tooltip) ---
+                var tooltip = am5.Tooltip.new(root, {
+                    getFillFromSprite: false,
+                    autoTextColor: false
+                });
+                tooltip.get("background").setAll({
+                    fill: am5.color(0xffffff),
+                    fillOpacity: 0.95,
+                    stroke: am5.color(0x185FA5),
+                    strokeWidth: 2,
+                    cornerRadius: 8
+                });
+                tooltip.label.setAll({
+                    fill: am5.color(0x333333),
+                    fontSize: 15,
+                    fontFamily: "'Segoe UI', Tahoma",
+                    fontWeight: "bold",
+                    textAlign: "center"
+                });
+
+                polygonSeries.mapPolygons.template.set("tooltip", tooltip);
+                polygonSeries.mapPolygons.template.setAll({ tooltipHTML: "<div style='direction:rtl; padding: 5px;'><span style='color: #185FA5; font-size: 16px;'>{name}</span><br/>عدد المترشحين: <span style='color: #e74c3c;'>{value}</span></div>", fill: am5.color(0xe0e0e0) });
+                polygonSeries.set("heatRules", [{ target: polygonSeries.mapPolygons.template, dataField: "value", min: am5.color(0xd1e9ff), max: am5.color(0x185FA5), key: "fill" }]);
+
+                polygonSeries.data.setAll([
+                    // المراكز (CFPA)
+                    { id: "DZ-40", value: 2 },   // خنشلة - عين طويلة (2)
+                    { id: "DZ-10", value: 10 },  // البويرة - المزدور (5) + سوق الخميس (5)
+                    { id: "DZ-04", value: 4 },   // أم البواقي (4)
+                    { id: "DZ-06", value: 2 },   // بجاية - بني معوش (2)
+                    { id: "DZ-43", value: 3 },   // ميلة - تلاغمة (3)
+                    { id: "DZ-31", value: 6 },   // وهران 01 بنات (6)
+                    { id: "DZ-18", value: 4 },   // جيجل (4)
+                    // المعاهد (INSFP)
+                    { id: "DZ-17", value: 3 },   // الجلفة - بربيح (3)
+                    { id: "DZ-24", value: 4 },   // قالمة - أمدور (4)
+                    { id: "DZ-26", value: 3 },   // المدية - البرواقية (3)
+                    { id: "DZ-15", value: 3 },   // تيزي وزو - بواقنون (3)
+                    { id: "DZ-34", value: 3 },   // برج بوعريريج - راس الوادي (3)
+                    { id: "DZ-22", value: 3 },   // سيدي بلعباس - لعجين ميلود (3)
+                    { id: "DZ-03", value: 5 },   // الأغواط - التسيير (5)
+                    // تلمسان: CFPA (6) + INSFP سبدو (3)
+                    { id: "DZ-13", value: 9 }
+                ]);
+
+                // --- HeatLegend مفتاح الخريطة ---
+                var heatLegend = root.container.children.push(am5.HeatLegend.new(root, {
+                    orientation: "horizontal",
+                    startColor: am5.color(0xd1e9ff),
+                    endColor: am5.color(0x185FA5),
+                    stepCount: 5,
+                    width: am5.percent(85),
+                    align: "center",
+                    marginTop: 15
+                }));
+
+                heatLegend.set("background", am5.RoundedRectangle.new(root, {
+                    fill: am5.color(0xffffff),
+                    fillOpacity: 0.95,
+                    cornerRadiusTL: 10,
+                    cornerRadiusTR: 10,
+                    cornerRadiusBL: 10,
+                    cornerRadiusBR: 10,
+                    stroke: am5.color(0xdddddd),
+                    strokeOpacity: 1
+                }));
+
+                heatLegend.startLabel.setAll({ fontSize: 13, fontWeight: "bold", fontFamily: "'Segoe UI', Tahoma", fill: am5.color(0x333333), paddingLeft: 10, paddingBottom: 5, paddingTop: 5, direction: "rtl" });
+                heatLegend.endLabel.setAll({ fontSize: 13, fontWeight: "bold", fontFamily: "'Segoe UI', Tahoma", fill: am5.color(0x333333), paddingRight: 10, paddingBottom: 5, paddingTop: 5, direction: "rtl" });
+
+                polygonSeries.events.on("datavalidated", function () {
+                    heatLegend.set("startValue", polygonSeries.getPrivate("valueLow"));
+                    heatLegend.set("endValue", polygonSeries.getPrivate("valueHigh"));
+
+                    // توليد التدرجات الرقمية على التسميات بشكل ملموس!
+                    let lowVal = polygonSeries.getPrivate("valueLow");
+                    let highVal = polygonSeries.getPrivate("valueHigh");
+                    heatLegend.set("startText", "أقل (" + lowVal + " مترشحين)");
+                    heatLegend.set("endText", "أكثر (" + highVal + " مترشحين)");
+                });
+            });
+
+            // --- 1.1 مخطط تصنيف التنقل (دائرة مثلثية / Pie Chart) ---
+            new Chart(document.getElementById('mobilityPie'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['تنقل داخلي (نفس الولاية)', 'تنقل خارجي (بين الولايات)'],
+                    datasets: [{
+                        data: [6, 5],
+                        backgroundColor: ['#27ae60', '#e74c3c'],
+                        cutout: '50%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', Tahoma", size: 14 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = ((value / total) * 100).toFixed(1) + '%';
+                                    return label + value + ' مترشح (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 1.2 مخطط تصنيف التنقل - مراكز (Pie Chart) ---
+            new Chart(document.getElementById('mobilityCenterPie'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['تنقل داخلي', 'تنقل خارجي'],
+                    datasets: [{
+                        data: [17, 23],
+                        backgroundColor: ['#27ae60', '#e74c3c'],
+                        cutout: '50%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', Tahoma", size: 13 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = ((value / total) * 100).toFixed(1) + '%';
+                                    return label + value + ' مترشح (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 2. مخطط نسبة المعاهد (دائري) ---
+            new Chart(document.getElementById('institutePie'), {
+                type: 'pie',
+                data: {
+                    labels: [
+                        'معهد أرزيو',
+                        'معهد سطيف',
+                        'معهد الطاهر',
+                        'معهد بودواو'
+                    ],
+                    datasets: [{
+                        data: [3, 3, 3, 2],
+                        backgroundColor: [
+                            '#185FA5', '#1abc9c', '#f39c12', '#e74c3c'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { font: { family: "'Segoe UI', Tahoma", size: 10 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = ((value / total) * 100).toFixed(1) + '%';
+                                    return label + value + ' مترشح/ة (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 2.2 مخطط نسبة المراكز (دائري) ---
+            new Chart(document.getElementById('centerPie'), {
+                type: 'pie',
+                data: {
+                    labels: [
+                        'تلمسان (6)',
+                        'سوق الخميس (5)',
+                        'المزدور (5)',
+                        'أم البواقي (4)',
+                        'جيجل (4)',
+                        'وهران 01 (6)',
+                        'عين طويلة (2)',
+                        'بني معوش (2)',
+                        'تلاغمة (3)'
+                    ],
+                    datasets: [{
+                        data: [6, 5, 5, 4, 4, 6, 2, 2, 3],
+                        backgroundColor: [
+                            '#3498db', '#e67e22', '#e74c3c', '#f1c40f',
+                            '#1abc9c', '#9b59b6', '#2ecc71', '#34495e', '#f39c12'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { bottom: 10 } },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "'Segoe UI', Tahoma", size: 10 },
+                                padding: 8,
+                                boxWidth: 12,
+                                maxWidth: 200
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return label + value + ' مترشح (' + percentage + ')';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 3. مخطط الرتب الحالية (Bar Chart) ---
+            const rankFullNames = [
+                "أستاذ متخصص في التكوين والتعليم المهنيين (بمختلف الصيغ)",
+                "متصرف رئيسي أو رتبة معادلة",
+                "مقتصد مسيّر لمؤسسات التكوين والتعليم المهنيين",
+                "مستشار رئيسي في التوجيه والتقييم والإدماج المهنيين"
+            ];
+            new Chart(document.getElementById('rankBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['أستاذ متخصص', 'متصرف رئيسي', 'مقتصد مسيّر', 'مستشار رئيسي'],
+                    datasets: [
+                        {
+                            label: 'عدد المترشحين',
+                            data: [11, 0, 0, 0],
+                            backgroundColor: ['#2980b9', '#8e44ad', '#27ae60', '#f39c12'],
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return rankFullNames[context[0].dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 5 } }
+                    }
+                }
+            });
+
+            // --- 3.2 مخطط الرتب الحالية لمدير المركز (Bar Chart) ---
+            const rankCenterFullNames = [
+                "أستاذ متخصص في التكوين والتعليم المهنيين (بمختلف الصيغ)",
+                "مساعد تقني وبيداغوجي",
+                "مستشار رئيسي في التوجيه والتقييم والإدماج المهنيين",
+                "مستشار التوجيه والإدماج المهنيين",
+                "متصرف / متصرف محلل",
+                "مقتصد مسير لمؤسسات التكوين والتعليم المهنيين"
+            ];
+
+            new Chart(document.getElementById('rankCenterBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['أستاذ متخصص', 'مساعد تقني', 'مستشار رئيسي', 'مستشار توجيه', 'متصرف', 'مقتصد'],
+                    datasets: [
+                        {
+                            label: 'عدد المترشحين',
+                            data: [23, 9, 3, 1, 2, 2],
+                            backgroundColor: ['#2ecc71', '#f1c40f', '#3498db', '#a55eea', '#795548', '#e67e22'],
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return rankCenterFullNames[context[0].dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 5 } }
+                    }
+                }
+            });
+
+            // --- 3.3 مخطط أعمدة مكدسة لتوزيع الرتب في معاهد INSFP ---
+            const insfpNames = insfpData.map(item => item.name);
+
+            new Chart(document.getElementById('stackedInsfpBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: insfpNames,
+                    datasets: [
+                        { label: 'أستاذ متخصص', data: insfpData.map(item => item.psep), backgroundColor: '#185FA5' },
+                        { label: 'متصرف رئيسي', data: insfpData.map(item => item.admin), backgroundColor: '#8e44ad' },
+                        { label: 'مقتصد مسيّر', data: insfpData.map(item => item.manager), backgroundColor: '#e67e22' },
+                        { label: 'مستشار رئيسي', data: insfpData.map(item => item.counselor), backgroundColor: '#27ae60' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', Tahoma", size: 12 } } },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.raw !== null && context.raw > 0) {
+                                        label += context.raw;
+                                        return label;
+                                    }
+                                    return null;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+
+            // --- 3.4 مخطط أعمدة مكدسة لتوزيع الرتب في مراكز CFPA ---
+            const cfpaNames = cfpaData.map(item => item.name.replace('CFPA ', ''));
+
+            new Chart(document.getElementById('stackedCfpaBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: cfpaNames,
+                    datasets: [
+                        { label: 'أستاذ متخصص', data: cfpaData.map(item => item.psep), backgroundColor: '#2ecc71', borderRadius: { topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0 } },
+                        { label: 'مساعد تقني', data: cfpaData.map(item => item.tech), backgroundColor: '#f1c40f' },
+                        { label: 'مستشار رئيسي', data: cfpaData.map(item => item.counselor), backgroundColor: '#3498db' },
+                        { label: 'مستشار توجيه', data: cfpaData.map(item => item.guidance), backgroundColor: '#e74c3c' },
+                        { label: 'متصرف', data: cfpaData.map(item => item.admin), backgroundColor: '#9b59b6' },
+                        { label: 'مقتصد', data: cfpaData.map(item => item.manager), backgroundColor: '#e67e22' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Segoe UI', Tahoma", size: 12 } } },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== null && context.raw > 0) {
+                                        label += context.raw;
+                                        return label;
+                                    }
+                                    return null;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+
+            // --- 4. تعبئة الجداول ---
+            const mainData = [
+                { n: "مركز تلمسان", w: "تلمسان", t: 29, m: 19, f: 10 },
+                { n: "معهد الأغواط", w: "الأغواط", t: 18, m: 11, f: 7 },
+                { n: "مركز وهران 01", w: "وهران", t: 12, m: 4, f: 8 }
+            ];
+            const vacantData = [
+                { r: 1, w: "بومرداس", i: "م.ت.م.ت زموري" },
+                { r: 2, w: "النعامة", i: "م.ت.م.ت عين الصفراء 02" },
+                { r: 3, w: "عنابة", i: "م.ت.م.ت بوعاطي محمود" },
+                { r: 4, w: "تيارت", i: "م.ت.م.ت قصر الشلالة" }
+            ];
+
+            const mainBody = document.getElementById('mainTableBody');
+            mainData.forEach(d => {
+                mainBody.innerHTML += `<tr><td><b>${d.n}</b></td><td>${d.w}</td><td>${d.t}</td>
+        <td><span class="badge badge-m">${d.m}</span></td><td><span class="badge badge-f">${d.f}</span></td></tr>`;
+            });
+
+            // --- 5. وظائف النافذة المنبثقة ---
+            function openModal() {
+                const vBody = document.getElementById('vacantTableBody');
+                vBody.innerHTML = "";
+                vacantData.forEach(v => { vBody.innerHTML += `<tr><td>${v.r}</td><td><b>${v.w}</b></td><td>${v.i}</td></tr>`; });
+                document.getElementById('vacantModal').style.display = "block";
+            }
+            function closeModal() { document.getElementById('vacantModal').style.display = "none"; }
+            window.onclick = function (e) { if (e.target == document.getElementById('vacantModal')) closeModal(); }
+        </script>
+
+</body>
+
+</html>
